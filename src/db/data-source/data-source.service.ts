@@ -4,7 +4,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies/snake-naming.stra
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class PrimaryDataSourceService {
+export class DataSourceService {
   constructor(private configService: ConfigService) {}
   createDatasourceOptions(tenantDb: string): DataSourceOptions {
     try {

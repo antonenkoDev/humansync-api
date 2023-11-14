@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { TenantsService } from '../tenants/tenants.service';
 import { DataSource } from 'typeorm';
-import { PrimaryDataSourceService } from '../primary-data-source/primary-data-source.service';
+import { DataSourceService } from '../data-source/data-source.service';
 
 @Injectable()
 export class ConnectionPoolService implements OnModuleInit {
@@ -15,7 +15,7 @@ export class ConnectionPoolService implements OnModuleInit {
 
   constructor(
     private tenantService: TenantsService,
-    private primaryDataSourceService: PrimaryDataSourceService,
+    private primaryDataSourceService: DataSourceService,
   ) {}
 
   async onModuleInit() {

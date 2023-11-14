@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrimaryDataSourceService } from './primary-data-source.service';
+import { DataSourceService } from './data-source.service';
 import { ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies/snake-naming.strategy';
 
 describe('PrimaryDataSourceService', () => {
-  let service: PrimaryDataSourceService;
+  let service: DataSourceService;
   let configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        PrimaryDataSourceService,
+        DataSourceService,
         {
           provide: ConfigService,
           useValue: {
@@ -20,7 +20,7 @@ describe('PrimaryDataSourceService', () => {
       ],
     }).compile();
 
-    service = module.get<PrimaryDataSourceService>(PrimaryDataSourceService);
+    service = module.get<DataSourceService>(DataSourceService);
     configService = module.get<ConfigService>(ConfigService);
   });
   describe('createDatasourceOptions', () => {

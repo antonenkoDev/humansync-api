@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TenantsService } from './tenants/tenants.service';
 import { ConnectionPoolService } from './connection-pool/connection-pool.service';
-import { PrimaryDataSourceService } from './primary-data-source/primary-data-source.service';
+import { DataSourceService } from './data-source/data-source.service';
 import { TenantProvider } from './tenants/tenant.provider';
 
 
@@ -13,7 +13,7 @@ import { TenantProvider } from './tenants/tenant.provider';
     OktaAuthConfig,
     OktaSdkConfig,
     Okta,
-    PrimaryDataSourceService,
+    DataSourceService,
     ...DatabaseProviders,
     ...organizationProviders,
     TenantProvider,
@@ -21,7 +21,7 @@ import { TenantProvider } from './tenants/tenant.provider';
   exports: [
     ConnectionPoolService,
     TenantsService,
-    PrimaryDataSourceService,
+    DataSourceService,
     TenantProvider,
   ],
 })

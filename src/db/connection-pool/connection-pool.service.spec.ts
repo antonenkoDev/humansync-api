@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConnectionPoolService } from './connection-pool.service';
 import { TenantsService } from '../tenants/tenants.service';
-import { PrimaryDataSourceService } from '../primary-data-source/primary-data-source.service';
+import { DataSourceService } from '../data-source/data-source.service';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Tenant } from '../tenants/tenant';
 import { BadRequestException, Logger } from '@nestjs/common';
@@ -9,7 +9,7 @@ import { BadRequestException, Logger } from '@nestjs/common';
 describe('ConnectionPoolService', () => {
   let service: ConnectionPoolService;
   let tenantsService: TenantsService;
-  let primaryDataSourceService: PrimaryDataSourceService;
+  let primaryDataSourceService: DataSourceService;
   let logger: Logger;
 
   const mockDataSourceInstance: Partial<jest.Mocked<DataSource>> = {
@@ -36,7 +36,7 @@ describe('ConnectionPoolService', () => {
           },
         },
         {
-          provide: PrimaryDataSourceService,
+          provide: DataSourceService,
           useValue: {
             createDatasourceOptions: jest.fn().mockReturnValue(mockDataSource),
           },
@@ -60,8 +60,8 @@ describe('ConnectionPoolService', () => {
       value: logger,
     });
     tenantsService = await module.resolve<TenantsService>(TenantsService);
-    primaryDataSourceService = await module.resolve<PrimaryDataSourceService>(
-      PrimaryDataSourceService,
+    primaryDataSourceService = await module.resolve<DataSourceService>(
+      DataSourceService,
     );
   });
 
