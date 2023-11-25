@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 
 @Entity()
@@ -7,5 +7,6 @@ export class Tag {
   uuid: string;
 
   @ManyToMany(() => User, (users) => users.tags)
+  @JoinTable()
   users: User[];
 }

@@ -1,6 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { OrgDevice } from './org-device.admin.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsAlphanumeric, IsLowercase } from 'class-validator';
 
 @Entity()
 export class Organization {
@@ -9,21 +9,17 @@ export class Organization {
 
   @Column({ unique: true })
   @ApiProperty()
+  @IsLowercase()
+  @IsAlphanumeric('en-US')
   customerId: string;
 
   @Column({ unique: true })
   @ApiProperty()
-  orgName: string;
+  name: string;
 
   @Column({ unique: true })
   databaseName: string;
 
   @Column({ unique: true })
-  oktaGroupId: string;
-
-  @Column({ unique: true })
-  oktaGroupName: string;
-
-  @OneToMany(() => OrgDevice, (orgDevice) => orgDevice.organization)
-  orgDevices: OrgDevice[];
+  auth0OrganizationId: string;
 }

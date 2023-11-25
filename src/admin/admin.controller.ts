@@ -1,72 +1,44 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  UseGuards,
-} from '@nestjs/common';
-import { RegisterOrganizationDto } from './dto/register-organization.dto';
+import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { SalesforceDeviceRequestDto } from './dto/salesforce-device-request.dto';
-import { ApiBadRequestResponse, ApiOkResponse } from '@nestjs/swagger';
-import { SalesForceReturnObj } from './interfaces/sf-return-obj';
 
 import { Organization } from './entities/organization.admin.entity';
+import { CreateOrganizationDto } from './dto/create-organization.dto';
+import { ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('admin')
 export class AdminController {
-  constructor(private adminService: AdminService) {}
+  private readonly logger = new Logger(this.constructor.name);
 
-  @Roles('SUPPORT')
-  @UseGuards(OktaGuard)
+  constructor(private adminService: AdminService) {
+    this.logger.log('ADMIN MODULE initialized');
+  }
+
+  @Get('organizations/:customerId')
+  @ApiOkResponse({
+    description: 'Get an Organization',
+  })
+  async getOrganization(@Param('customerId') customerId: string) {
+    return await this.adminService.getOrganization(customerId);
+  }
+
   @Get('organizations')
   @ApiOkResponse({
     description: 'Get a list of organizations',
-    type: OrganizationDto,
+    type: Organization,
     isArray: true,
   })
   async getOrganizationList() {
-    return await this.adminService.getOrganizationList();
+    return await this.adminService.getOrganizations();
   }
 
-  @Post('organizations/register')
+  @Post('organizations')
   @ApiOkResponse({
     description: 'Organization successfully added',
     type: Organization,
   })
-  async registerOrganization(@Body() registerOrgDto: RegisterOrganizationDto) {
-    return await this.adminService.createOrganization(registerOrgDto);
-  }
-
-  @Post('salesforce/register')
-  @ApiOkResponse({ description: 'Success', type: SalesForceReturnObj })
-  @ApiBadRequestResponse(badResponse)
-  async salesforceDeviceRegister(
-    @Body() salesforceRequest: SalesforceDeviceRequestDto,
+  async registerOrganization(
+    @Body() createOgranizationDto: CreateOrganizationDto,
   ) {
-    return await this.adminService.handleSalesforceRequest(salesforceRequest);
-  }
-
-  @Put('salesforce/register')
-  @ApiOkResponse({ description: 'Success', type: SalesForceReturnObj })
-  @ApiBadRequestResponse(badResponse)
-  async salesforceDeviceUpdate(
-    @Body() salesforceRequest: SalesforceDeviceRequestDto,
-  ) {
-    return await this.adminService.handleSalesforceRequestUpdate(
-      salesforceRequest,
-    );
-  }
-
-  @Roles('ADMIN')
-  @UseGuards(OktaGuard)
-  @Delete('organization/:id')
-  @ApiOkResponse({ description: 'Success' })
-  @ApiBadRequestResponse(badResponse)
-  async deleteOrganization(@Param('id') id: string) {
-    return this.adminService.deleteTenant(id);
+    return await this.adminService.createOrganization(createOgranizationDto);
   }
 }

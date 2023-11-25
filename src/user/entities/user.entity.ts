@@ -6,11 +6,14 @@ import { Tag } from '../../tag/entities/tag.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
-  @Column()
+  @Column({ nullable: true })
   idpId: string;
+
+  @Column({ nullable: true })
+  isActive: boolean;
 
   @Column()
   @ApiProperty()
@@ -21,11 +24,11 @@ export class User {
   firstName: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: true })
   lastName: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: true })
   phone: string;
 
   @ApiPropertyOptional()
@@ -48,7 +51,6 @@ export class User {
   @Column({ nullable: true })
   timezone?: string;
 
-  @Column({ nullable: true })
   @ManyToMany(() => Tag, (tags) => tags.users)
   tags?: Tag[];
 
@@ -56,7 +58,6 @@ export class User {
   @Column({ type: 'integer', nullable: true })
   workMode?: WorkModeEnum;
 
-  @Column({ nullable: true })
   @ManyToMany(() => Team, (teams) => teams.users)
   teams?: Team[];
 }
