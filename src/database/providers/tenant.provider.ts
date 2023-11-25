@@ -11,7 +11,7 @@ export const TenantProvider = {
   useFactory: async (request, connection) => {
     try {
       logger.log('Tenant Provider Initialized');
-      return await connection.getTenantDataSource(request.customerId);
+      return await connection.getTenantConnection(request.customerId);
     } catch (err) {
       logger.error(err);
       throw err;

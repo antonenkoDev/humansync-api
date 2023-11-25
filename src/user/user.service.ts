@@ -24,6 +24,12 @@ export class UserService {
     this.userRepository = dataSource.getRepository(User);
   }
 
+  async findAll(options?: { isActive: boolean }) {
+    return await this.userRepository.find({
+      where: { isActive: options?.isActive ?? true },
+    });
+  }
+
   async create(
     createUserDto: CreateUserDto,
     options?: { connectionName?: string; auth0OrganizationId?: string },
@@ -37,13 +43,15 @@ export class UserService {
       // phone_number: createUserDto.phone,
     });
 
-    const newUser: User = this.userRepository.create(createUserDto);
     await this.addUserToAuth0Organization(
       auth0UserId,
       options?.auth0OrganizationId ??
         this.request.organization.auth0OrganizationId,
     );
+
+    const newUser: User = this.userRepository.create(createUserDto);
     newUser.idpId = auth0UserId;
+    newUser.isActive = true;
     return this.userRepository.save(newUser);
   }
 

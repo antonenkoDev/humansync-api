@@ -40,10 +40,9 @@ export class AdminService {
       displayName: createOrganizationDto.name,
       connections: createOrganizationDto.allowedAuthTypes,
     });
-    const databaseName = this.generateDatabaseName(
+    const newDataSource = await this.createOrganizationDatabase(
       createOrganizationDto.customerId,
     );
-    const newDataSource = await this.createOrganizationDatabase(databaseName);
 
     const adminUser = createOrganizationDto.adminUser;
     const userService = new UserService(
@@ -60,7 +59,9 @@ export class AdminService {
     organization.auth0OrganizationId = auth0OrganizationId;
     organization.customerId = createOrganizationDto.customerId;
     organization.name = createOrganizationDto.name;
-    organization.databaseName = databaseName;
+    organization.databaseName = this.generateDatabaseName(
+      createOrganizationDto.customerId,
+    );
 
     return {
       organization: await this.organizationRepository.save(organization),

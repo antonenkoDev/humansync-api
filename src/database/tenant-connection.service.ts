@@ -1,11 +1,11 @@
 // tenant-connection.service.ts
-import { Injectable, Logger, Scope } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { AdminDatabaseConfigService } from './admin-database-config.service';
 import { Organization } from '../admin/entities/organization.admin.entity';
 import { TenantDatabaseConfigService } from './tenant-database-config.service';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class TenantConnectionService {
   private connectionMap: Map<string, DataSource> = new Map();
   private logger = new Logger(this.constructor.name);
@@ -37,7 +37,7 @@ export class TenantConnectionService {
     });
   }
 
-  private async generateConnections() {
+  public async generateConnections() {
     const tenants = await this.getTenants();
     for (const tenant of tenants) {
       const newDataSource = await this.initializeTenantDataSource(
@@ -47,28 +47,42 @@ export class TenantConnectionService {
     }
   }
 
-  // async getTenantConnection(customerId: string): Promise<DataSource> {
-  //
-  //     const organization = await this.organizationRepository.findOne({
-  //       where: {
-  //         customerId: customerId,
-  //       },
-  //       select: ['databaseName'],
-  //     });
-  //     if (!organization || !organization?.databaseName) {
-  //       throw new InternalServerErrorException('No organization found');
-  //     }
-  //     const dataSource = new DataSource({
-  //       type: 'postgres',
-  //       // ... other options based on organization
-  //       database: organization.databaseName,
-  //     });
-  //     await dataSource.initialize();
-  //     this.connectionMap.set(customerId, dataSource);
-  //   }
-  //
-  //   return this.connectionMap.get(customerId);
-  // }
+  public async getTenantConnection(customerId: string): Promise<DataSource> {
+    // First, check if the connection for the tenant already exists.
+    let dataSource = this.connectionMap.get(customerId);
+    if (dataSource) {
+      return dataSource;
+    }
+
+    // If the connection does not exist, retrieve the organization info.
+    const organization = await this.organizationRepository.findOne({
+      where: { customerId: customerId },
+      select: ['databaseName'],
+    });
+
+    // If the organization is not found or doesn't have a databaseName, throw an error.
+    if (!organization || !organization.databaseName) {
+      throw new Error(
+        `Organization with customer ID ${customerId} not found or missing database name.`,
+      );
+    }
+
+    // Initialize a new DataSource for the tenant's database.
+    dataSource = new DataSource(
+      this.tenantDatabaseConfigService.createTypeOrmOptions(
+        organization.databaseName,
+      ),
+    );
+    await dataSource.initialize();
+
+    // Optionally, you can run migrations here if needed.
+    // await dataSource.runMigrations();
+
+    // Store the new DataSource in the connection map.
+    this.addTenantToConnectionMap(customerId, dataSource);
+
+    return dataSource;
+  }
 
   public async initializeTenantDataSource(
     databaseName: string,

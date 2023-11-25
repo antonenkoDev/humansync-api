@@ -1,7 +1,6 @@
 // tenant-identification.middleware.ts
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Response, NextFunction } from 'express';
-import { AdminService } from '../admin/admin.service';
 import { HsRequest } from '../interfaces/hs-request.interface';
 
 @Injectable()
