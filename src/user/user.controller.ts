@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
@@ -10,6 +10,15 @@ export class UserController {
 
   constructor(private readonly userService: UserService) {
     this.logger.log('USER CONTROLLER initialized');
+  }
+
+  @Get('/:id')
+  @ApiOkResponse({
+    description: 'Get Users by id',
+    type: User,
+  })
+  async getUserById(@Param('id') userid: string) {
+    return this.userService.findById(userid);
   }
 
   @Get('/')
