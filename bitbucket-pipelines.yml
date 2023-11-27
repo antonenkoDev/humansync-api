@@ -7,17 +7,18 @@ image: node:16
 
 pipelines:
   default:
-    - step:
-        name: Build and Test
-        caches:
-          - node
-        script:
-          - npm install
+    #    - step:
+    #        name: Build and Test
+    #        caches:
+    #          - node
+    #        script:
+    #          - npm install
     - step:
         name: Deploy to test
         deployment: test
         # trigger: manual  # Uncomment to make this a manual deployment.
         script:
           - echo "Deploying to test environment"
+          - npm install
           - npm run build
           - scp -r ./dist/* humansync@humansync.curl.school:/home/humansync/www/api/
