@@ -14,7 +14,6 @@ pipelines:
               - node
             script:
               - npm install
-              - npm install -g @nest/cli
         - step:
             name: Deploy to test
             deployment: test
