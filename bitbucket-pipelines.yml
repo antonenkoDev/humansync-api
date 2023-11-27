@@ -3,7 +3,7 @@
 #  This template allows you to validate your NodeJS code.
 #  The workflow allows running tests and code linting on the default branch.
 
-image: node:16
+image: node:18
 
 pipelines:
   default:
@@ -22,3 +22,6 @@ pipelines:
           - npm install
           - npm run build
           - scp -r ./dist/* humansync@humansync.curl.school:/home/humansync/www/api/
+          - scp ./package.json humansync@humansync.curl.school:/home/humansync/www/api/
+            scp ./package-lock.json humansync@humansync.curl.school:/home/humansync/www/api/
+
