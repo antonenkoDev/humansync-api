@@ -22,6 +22,7 @@ export class TenantDatabaseConfigService {
       entities: ['dist/**/entities/*.entity.js'],
       migrations: ['dist/db/migrations/*.js'],
       namingStrategy: new SnakeNamingStrategy(),
+      ssl: { rejectUnauthorized: false },
     };
   }
 }

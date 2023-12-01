@@ -7,10 +7,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // const adminDataSource = app.get('ADMIN_DATA_SOURCE_TOKEN');
-  // await adminDataSource.initialize();
-  // await adminDataSource.runMigrations();
-
   app.setGlobalPrefix('api');
   app.enableCors({
     origin: true,

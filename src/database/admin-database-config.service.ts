@@ -22,6 +22,7 @@ export class AdminDatabaseConfigService {
       entities: ['dist/**/entities/*.entity.js'],
       migrations: ['dist/db/admin-migrations/*.js'],
       namingStrategy: new SnakeNamingStrategy(),
+      ssl: { rejectUnauthorized: false },
     };
   }
 }

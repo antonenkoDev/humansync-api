@@ -19,9 +19,10 @@ pipelines:
         # trigger: manual  # Uncomment to make this a manual deployment.
         script:
           - echo "Deploying to test environment"
-          - npm install
-          - npm run build
-          - scp -r ./dist/* humansync@humansync.curl.school:/home/humansync/www/api/
-          - scp ./package.json humansync@humansync.curl.school:/home/humansync/www/api/
-            scp ./package-lock.json humansync@humansync.curl.school:/home/humansync/www/api/
+          - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "cd /home/humansync/www/hs-api/ && git pull origin main"
+          - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "npm install --only=production"
+          - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "npm run build"
+          - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "pm2 restart 'humansync-api'"
+
+
 
