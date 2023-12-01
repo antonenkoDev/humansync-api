@@ -20,8 +20,8 @@ pipelines:
         script:
           - echo "Deploying to test environment"
           - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "cd /home/humansync/www/hs-api/ && git pull origin main"
-          - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "npm install --only=production"
-          - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "npm run build"
+          - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "cd /home/humansync/www/hs-api/ && npm install --only=production"
+          - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "cd /home/humansync/www/hs-api/ && npm run build"
           - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "pm2 restart 'humansync-api'"
 
 
