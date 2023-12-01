@@ -3,6 +3,7 @@
 </p>
 
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
   <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
@@ -58,9 +59,35 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Deploy
+
+Create bash script:
+
+```#!/bin/bash
+
+echo "Deploying to test environment"
+
+# Change to the project directory
+cd /home/humansync/www/hs-api/
+
+# Pull the latest changes from the main branch
+git pull origin main
+
+# Use NVM to set Node version and install dependencies
+nvm use 18
+npm install --only=production
+
+# Build the application
+npm run build
+
+# Restart the application using PM2
+pm2 restart 'humansync-api'
+```
+
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If
+you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
 
