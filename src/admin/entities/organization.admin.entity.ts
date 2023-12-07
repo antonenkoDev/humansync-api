@@ -1,6 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsAlphanumeric, IsLowercase } from 'class-validator';
+import { Owner } from './owner.admin.entity';
 
 @Entity()
 export class Organization {
@@ -22,4 +30,8 @@ export class Organization {
 
   @Column({ unique: true })
   auth0OrganizationId: string;
+
+  @ManyToMany(() => Owner, (owner) => owner.organizations)
+  @JoinTable()
+  owner: Owner;
 }
