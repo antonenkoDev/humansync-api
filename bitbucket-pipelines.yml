@@ -19,7 +19,7 @@ pipelines:
         # trigger: manual  # Uncomment to make this a manual deployment.
         script:
           - echo "Deploying to test environment"
-          - ssh humansync@ec2-3-120-248-215.eu-central-1.compute.amazonaws.com "/home/humansync/.local/bin/api-deploy"
+          - ssh humansync@humansync.curl.school "/home/humansync/.local/bin/api-deploy"
 
 
 
